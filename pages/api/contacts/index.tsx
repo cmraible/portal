@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { unstable_getServerSession } from 'next-auth';
 import prisma from '../../../lib/prisma';
+import { createOrRetrieveCustomer } from '../../../lib/stripe/stripe-admin';
 import { authOptions } from '../auth/[...nextauth]';
 
 
@@ -18,6 +19,7 @@ const Contact = async (req: NextApiRequest, res: NextApiResponse) => {
           is_staff: req.body.lifecycle_stage === 'Staff' ? true : false
         }
       })
+      const result = createOrRetrieveCustomer({email: contact.email, uuid: contact.id})
       return res.status(200).json(contact);
     } catch (err: any) {
       console.log(err);
