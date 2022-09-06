@@ -6,7 +6,7 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "cypress": "cypress open",
+    "vercel-build": "prisma generate && prisma migrate deploy && next build",
     "stripe:listen": "stripe listen --forward-to=localhost:3000/api/stripe/webhooks",
     "studio": "npx prisma studio"
   },
