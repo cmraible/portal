@@ -62,7 +62,7 @@ export const getServerSideProps = async (ctx) => {
 };
 
 
-export default function ProjectPage({ project, timers }: { project: Project, timers: TimerWithProjectAndTask}) {
+export default function ProjectPage({ project, timers }: { project: Project, timers: TimerWithProjectAndTask[]}) {
   const router = useRouter();
 
   const refreshProps = () => {

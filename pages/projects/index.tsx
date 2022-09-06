@@ -43,9 +43,7 @@ export async function getServerSideProps(ctx) {
           }
         }
       })
-      
-      console.log(timers)
-      return {props: { projects: JSON.parse(JSON.stringify(projects)), timers: JSON.parse(JSON.stringify(timers)) }}
+      return {props: { projects: JSON.parse(JSON.stringify(projects)) }}
 
     }
 }

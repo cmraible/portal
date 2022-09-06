@@ -1,13 +1,11 @@
-import ProjectList from '../../components/ProjectList';
-import Layout from '../../components/Layout';
-import { createOrRetrieveCustomer } from '../../lib/stripe/stripe-admin';
-import { Project, TimerWithProjectAndTask } from '../../types';
-import { unstable_getServerSession } from 'next-auth';
-import { authOptions } from '../api/auth/[...nextauth]';
-import prisma from '../../lib/prisma';
 import { User } from '@prisma/client';
-import ContactList from '../../components/ContactList';
+import { unstable_getServerSession } from 'next-auth';
 import { useRouter } from 'next/router';
+import ContactList from '../../components/ContactList';
+import Layout from '../../components/Layout';
+import prisma from '../../lib/prisma';
+import { TimerWithProjectAndTask } from '../../types';
+import { authOptions } from '../api/auth/[...nextauth]';
 
 export async function getServerSideProps(ctx) {
     // Access the user object
