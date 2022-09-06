@@ -1,60 +1,71 @@
-import React from "react"
-import { GetStaticProps } from "next"
-import Layout from "../components/Layout"
-import Post, { PostProps } from "../components/Post"
+import Layout from '../components/Layout';
+import { authOptions } from './api/auth/[...nextauth]'
+import { unstable_getServerSession } from "next-auth/next"
+import prisma from '../lib/prisma';
+import { Timer } from '@prisma/client';
+import { useRouter } from 'next/router';
+import { TimerWithProjectAndTask } from '../types';
 
-export const getStaticProps: GetStaticProps = async () => {
-  const feed = [
-    {
-      id: "1",
-      title: "Prisma is the perfect ORM for Next.js",
-      content: "[Prisma](https://github.com/prisma/prisma) and Next.js go _great_ together!",
-      published: false,
-      author: {
-        name: "Nikolas Burk",
-        email: "burk@prisma.io",
+export default function Home({ timers }: { timers: TimerWithProjectAndTask[] }) {
+
+  const router = useRouter();
+  const refreshProps = () => {
+    router.replace(router.asPath);
+  }
+    return (
+      <Layout 
+        timers={timers}
+        refresh={refreshProps}
+        current="Home"
+        meta={{title: "Home"}} 
+        breadcrumbs={[
+          {label: "Home", href: "/"},
+        ]}
+      >
+        <div>
+          <div className="flex flex-col py-4">
+          </div>
+        </div>
+      </Layout>
+    );
+}
+
+export async function getServerSideProps(ctx) {
+  // Access the user object
+  const session = await unstable_getServerSession(ctx.req, ctx.res, authOptions)
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/signin',
+        permanent: false,
       },
-    },
-  ]
-  return { 
-    props: { feed }, 
-    revalidate: 10 
+    }
+  }
+  if (session.user.is_superuser || session.user.is_staff) {
+    const timers = await prisma.timer.findMany({
+      where: {
+        user_id: session.user.id,
+        ended: null
+      },
+      include: {
+        project: true,
+        task: true
+      }
+    })
+    return {props: { timers: JSON.parse(JSON.stringify(timers)) }}
+  } else {
+    const timers = await prisma.timer.findMany({
+      where: {
+        user_id: session.user.id
+      },
+      include: {
+        project: true,
+        task: true
+      }
+    })
+    return {props: { timers: JSON.parse(JSON.stringify({})) }}
+
   }
 }
 
-type Props = {
-  feed: PostProps[]
-}
 
-const Blog: React.FC<Props> = (props) => {
-  return (
-    <Layout>
-      <div className="page">
-        <h1>Public Feed</h1>
-        <main>
-          {props.feed.map((post) => (
-            <div key={post.id} className="post">
-              <Post post={post} />
-            </div>
-          ))}
-        </main>
-      </div>
-      <style jsx>{`
-        .post {
-          background: white;
-          transition: box-shadow 0.1s ease-in;
-        }
-
-        .post:hover {
-          box-shadow: 1px 1px 3px #aaa;
-        }
-
-        .post + .post {
-          margin-top: 2rem;
-        }
-      `}</style>
-    </Layout>
-  )
-}
-
-export default Blog
