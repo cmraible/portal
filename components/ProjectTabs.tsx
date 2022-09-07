@@ -1,4 +1,5 @@
 import { Project } from "@prisma/client"
+import { transcode } from "buffer";
 import Link from 'next/link';
 
   
@@ -22,8 +23,11 @@ import Link from 'next/link';
           {/* Use an "onChange" listener to redirect the user to the selected tab URL. */}
           <select
             id="tabs"
+            onChange={(e) => {
+              window.location.assign(tabs.find(tab => tab.name === e.target.value).href)
+            }}
             name="tabs"
-            className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+            className="block w-full rounded-md bg-zinc-800 border-zinc-700 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
             defaultValue={tabs.find((tab) => tab.current).name}
           >
             {tabs.map((tab) => (
