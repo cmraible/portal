@@ -1,17 +1,22 @@
 import { Dialog, Menu, Transition } from '@headlessui/react';
-import { BriefcaseIcon, ClockIcon, CreditCardIcon, MenuAlt2Icon, UserIcon, HomeIcon, UsersIcon, XIcon } from '@heroicons/react/outline';
-import { User } from '@prisma/client';
-import { Session } from 'next-auth';
-import { signOut } from 'next-auth/react';
+import { BriefcaseIcon, CreditCardIcon, HomeIcon, MenuAlt2Icon, UserIcon, UsersIcon, XIcon } from '@heroicons/react/outline';
+import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { Fragment, useState } from 'react';
+import LoadingDots from './ui/LoadingDots';
 
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Sidebar({ session, current} : { session: Session, current: string}) {
+export default function Sidebar({ current} : { current: string}) {
+
+  const { data: session, status } = useSession();
+  if (session === undefined) {
+    return (<LoadingDots />)
+  }
+
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
