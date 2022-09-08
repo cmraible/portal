@@ -58,7 +58,7 @@ export default function NewContact({ timers }: {timers: TimerWithProjectAndTask[
       })
     })
     .then(response => response.json())
-    .then(data => window.location.assign(`/contacts/${data.id}`))
+    .then(data => router.push(`/contacts/${data.id}`))
     
   }
   return (
