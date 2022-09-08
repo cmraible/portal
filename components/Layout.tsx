@@ -49,7 +49,7 @@ export default function Layout({ children, timers, meta: pageMeta, current, acti
         <meta property="og:description" content={meta.description} />
         <meta property="og:title" content={meta.title} />
       </Head>
-      <Sidebar session={session} current={current || ''} />
+      <Sidebar current={current || ''} />
       
       <div className="md:pl-64 flex flex-col">
       {timers && timers.length > 0 && (

@@ -104,7 +104,7 @@ export default function ProjectPage({ project, timers }: { project: Project, tim
             <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt className="text-sm font-medium text-zinc-400">Domain</dt>
                 <dd className="mt-1 text-sm text-zinc-200 sm:mt-0 sm:col-span-2 hover:underline">
-                    <a target="_blank" href={`http://${project.domain}`}>
+                    <a target="_blank" href={`https://${project.domain}`}>
                     {project.domain}
                     </a>
                 </dd>
